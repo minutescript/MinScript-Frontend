@@ -1,0 +1,52 @@
+#uploadProgress, #processingProgress, #uploadComplete {
+  font-family: Lato, sans-serif;
+}
+
+#upload-progress-bar {
+  margin-top: 32px;
+  width: 100%;
+}
+
+.recording-details {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: 0;
+  transform: translate(-50%, -50%);
+}
+
+#recordUploadBtnBox {
+  height: 6em;
+  display: block;
+  width: 20em;
+}
+
+#recordBtn {
+  margin-right: 1em;
+  width: 10em;
+}
+
+#uploadDialog {
+  margin-top: 1em;
+}
+
+#openUploadDialogBtn {
+  margin-left: 1em;
+  width: 10em;
+}
+
+#recordingTimer {
+  margin-top: 1em;
+  text-align: center;
+}
+#stopBtn {
+  width: 23em;
+}
+
+#player {
+  width: 100%;
+}
+
+#saveForm {
+  width: 100%;
+}

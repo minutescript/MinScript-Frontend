@@ -1,0 +1,79 @@
+<!-- *ngIf makes sure everything is loaded before loading the rest of the component.
+      This means item must be selected and its audio URL acquired. -->
+<div *ngIf="getAudioSrc()">
+
+  <!-- defining area split between main area and initially hidden sidenav -->
+  <mat-sidenav-container>
+    <!-- search bar as a Material sidenav -->
+    <mat-sidenav #sidenav position="end">
+      <!-- search input field -->
+      <mat-form-field id="searchField"><input #searchField matInput placeholder="Search all recordings"></mat-form-field>
+      <!-- show list of search results when available -->
+      <mat-nav-list id="searchResults" *ngIf="search.searchRecording(searchField.value)">
+        <mat-list-item (click)="selectSearchResult(result)" *ngFor="let result of search.searchRecording(searchField.value)">
+          <!-- recording title -->
+          <h3 mat-line>{{result.item.title}}</h3>
+          <!-- recording date -->
+          <p mat-line class="mat-line">
+            {{result.item.timestamp.toDate().toDateString()}} {{result.item.timestamp.toDate().toLocaleTimeString()}}
+          </p>
+          <!-- searched excerpt -->
+          <p mat-line class="mat-line">{{result.excerpt}}</p>
+        </mat-list-item>
+      </mat-nav-list>
+    </mat-sidenav>
+    <!-- defining main area -->
+    <mat-sidenav-content>
+      <div class="container" fxLayout="column" fxLayoutGap="24px">
+        <!-- load player area-->
+        <div>
+          <mat-card-title>{{currentItem.title}}</mat-card-title>
+          <div id="playerArea">
+            <!-- load player with the selected recording -->
+            <audio #player id="player" src="{{getAudioSrc()}}" controls>
+              Your browser does not support the <code>audio</code> element.
+            </audio>
+            <!-- search button positioned next to the player -->
+            <button mat-button (click)="sidenav.toggle()" matTooltip="Search recordings" id="searchButton">
+              <mat-icon>search</mat-icon>
+            </button>
+          </div>
+          <!-- FAB to start a recording; not available when user not enabled or no recordings available -->
+          <button mat-fab *ngIf="canRecord()" color="warn" (click)="openRecordDialog()" class="floatingFab">
+            <mat-icon>add</mat-icon>
+          </button>
+          <!-- transcript area and transcript content -->
+          <div id="transcript-area">
+            <!-- transcript content is iterated through every word as each word triggers different action on click -->
+            <span *ngFor="let word of currentItem.word_ts">
+              <span class="word-ts" (click)="setTime(word.s)">{{word.w}}</span>
+            </span>
+          </div>
+          <!-- a neat divider -->
+          <mat-divider class="small-divider"></mat-divider>
+        </div>
+        <!-- recording playlist -->
+        <div id="transcript-playlist">
+          <!-- defining Material nav list -->
+          <mat-nav-list id="playlist">
+            <!-- defining list entry, which is shaded when active -->
+            <mat-list-item (click)="recordingOnClick(item)" *ngFor="let item of session.getItemArray()" [ngClass]="{activeItem: item===currentItem}">
+              <!-- list item title -->
+              <h3 mat-line>{{item.title}}</h3>
+              <mat-icon mat-list-icon>record_voice_over</mat-icon>
+              <!-- recording date -->
+              <p mat-line class="mat-line">{{item.timestamp.toDate().toDateString()}} {{item.timestamp.toDate().toLocaleTimeString()}}</p>
+              <!-- recording length -->
+              <p mat-line class="mat-line">{{this.getPlayTime(item.length)}}</p>
+              <!-- transcription status -->
+              <mat-icon *ngIf="item.transcript_status=='success'" matTooltip="Transcription complete">done</mat-icon>
+              <mat-icon *ngIf="item.transcript_status==null
+                || item.transcript_status.includes('error')" matTooltip="Transcription failed">error</mat-icon>
+              <mat-icon *ngIf="item.transcript_status=='processing'" matTooltip="Transcription in progress">cached</mat-icon>
+            </mat-list-item>
+          </mat-nav-list>
+        </div>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

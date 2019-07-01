@@ -1,0 +1,4 @@
+/**
+ * @ignore
+ */
+export const BACKEND_URL = 'YOUR_API_URL';

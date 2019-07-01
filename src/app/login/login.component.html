@@ -1,0 +1,36 @@
+<!-- div shown when user authorised; if not, showing #showLogin template -->
+<div *ngIf="this.getAuthState() | async as user; else showLogin">
+  <!-- user menu button -->
+  <button mat-button [matMenuTriggerFor]="menu">
+    <mat-icon>account_circle</mat-icon>
+    &nbsp;{{ user.displayName.split(" ")[0] }} <!-- &nbsp; added to make clear whitespace should be here -->
+  </button>
+  <!-- user menu shows after user menu button clicked -->
+  <mat-menu #menu="matMenu" [overlapTrigger]="false">
+    <!-- non-clickable button informing of recordings available -->
+    <button mat-menu-item *ngIf="this.isUserEnabled()">
+      <mat-icon>mic</mat-icon>
+      <span [style.vertical-align]="'middle'">
+        {{ getNumAvailableRecordings() }}/{{ getMaxNumRecordings() }}
+        &nbsp;Free Recordings <!-- &nbsp; added to make clear whitespace should be here -->
+      </span>
+    </button>
+    <!-- settings button, not yet implemented -->
+    <button mat-menu-item disabled>
+      <mat-icon>settings</mat-icon>
+      <span [style.vertical-align]="'middle'">Preferences</span>
+    </button>
+    <!-- neat separator -->
+    <mat-divider></mat-divider>
+    <!-- logout button -->
+    <button mat-menu-item (click)="this.logout()">
+      <mat-icon>exit_to_app</mat-icon>
+      <span [style.vertical-align]="'middle'">Sign Out</span>
+    </button>
+  </mat-menu>
+</div>
+
+<!-- when user not authorised, just show the log in button -->
+<ng-template #showLogin>
+  <button mat-raised-button color="warn" (click)="this.login()">Sign in with Google</button>
+</ng-template>

@@ -1,0 +1,47 @@
+<div class="recording-details">
+  <!-- show recording options if app is ready for recording -->
+  <div id="recordUploadBtnBox" *ngIf="showRecordBtn">
+    <!-- show record button-->
+    <button mat-raised-button id="recordBtn"
+            color="accent" (click)="clickRecordBtn()">Start recording</button>
+    <!-- show upload recording button -->
+    <button mat-raised-button id="openUploadDialogBtn"
+            color="accent" (click)="uploadDialogBtn()">Upload recording</button>
+    <!-- if Upload recording button clicked, show file picker -->
+    <div id="uploadDialog" *ngIf="uploadSelected">
+      <input #fileSelector type="file" id="fileSelector" name="fileUpload">
+      <button mat-raised-button (click)="uploadRecordingBtn()">Upload</button>
+    </div>
+  </div>
+  <!-- show recording progress and stop recording button when recording -->
+  <div id="recordProgress" *ngIf="isRecording">
+    <button id="stopBtn" mat-raised-button (click)="clickStopBtn()">Stop recording</button>
+    <div id="recordingTimer"><h3 mat-dialog-title>{{currentRecordingTime}}</h3></div>
+  </div>
+  <!-- when recording finished or file picked, show save dialog -->
+  <div *ngIf="showSaveDialog">
+    <!-- audio element to listen to the recording before upload -->
+    <audio class="e2e-iframe-trusted-src" id="player" controls [src]="trustedURL">
+      Your browser does not support the <code>audio</code> element.
+    </audio>
+    <!-- allow user to give a title to a recording -->
+    <form id="saveForm">
+      <mat-form-field>
+        <input #recTitle (keyup.enter)="passTitle(recTitle.value, finalBlob)" matInput placeholder="Recording title">
+      </mat-form-field>
+      <button mat-raised-button color="accent" (click)="passTitle(recTitle.value, finalBlob)">Upload</button>
+      <button mat-raised-button (click)="cancelRecord()">Cancel</button>
+    </form>
+  </div>
+  <!-- when uploading, show progress bar -->
+  <div id="uploadProgress" *ngIf="showUploadProgress">
+    <p mat-line>Uploading your recording:</p>
+    <mat-progress-bar id="upload-progress-bar" mode="determinate" value="{{this.upload.getProgress()}}"></mat-progress-bar>
+  </div>
+  <!-- when upload finished, let user wait for processing to finish -->
+  <div id="processingProgress" *ngIf="showProcessing">
+    <p mat-line>Processing</p>
+    <mat-spinner></mat-spinner></div>
+  <!-- notify user job is done -->
+  <div id="uploadComplete" *ngIf="showComplete"><p>Upload complete!</p></div>
+</div>

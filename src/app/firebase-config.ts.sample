@@ -1,0 +1,11 @@
+/**
+ * @ignore
+ */
+export const FirebaseConfig = {
+  apiKey: 'YOUR_API_KEY',
+  authDomain: 'example.com',
+  databaseURL: 'YOUR_DATABASE_URL',
+  projectId: 'YOUR_PROJECT_ID',
+  storageBucket: 'YOUR_STORAGE_BUCKET',
+  messagingSenderId: 'YOUR_SENDER_ID'
+};
