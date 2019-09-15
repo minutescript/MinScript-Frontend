@@ -11,6 +11,7 @@ import {UploadService} from '../services/upload.service';
 import {UserSessionService} from '../services/user-session.service';
 import {TokenUploadResponse} from '../interfaces/token-upload-response';
 
+import {RECORD_LANGUAGES} from '../settings/record-languages';
 import {BACKEND_URL} from '../backend-config'; // edit this file to add your backend URL
 
 // declaring WebAudioRecorder imported in index.html
@@ -52,6 +53,8 @@ export class RecordComponent {
   private diarize = false; // true if user wants to diarize the recording
   private autoDetect = false; // true if user wants to automatically detect number of speakers
   private noSpeakers = 2; // default number of speakers
+  private mainLang = 'en-US'; // default recognition language
+  readonly RECORD_LANGUAGES = RECORD_LANGUAGES; // make constant visible to the template
 
   /**
    * Constructor adds event listener to prevent accidental tab closure during recording.
@@ -67,6 +70,7 @@ export class RecordComponent {
    */
   constructor(private session: UserSessionService, private upload: UploadService, private sanitizer: DomSanitizer,
               private snackBar: MatSnackBar, public recordDialog: MatDialogRef<RecordComponent>) {
+
     // compliant with current specification
     window.onbeforeunload = (e) => {
       if (this.preventTabClosing) {
@@ -256,7 +260,7 @@ export class RecordComponent {
           uri: 'gs://minutescript/' + uploadRecRes.fullPath,
           file_name: uploadRecRes.name,
           title: this.recordTitle,
-          main_lang: "en-US", // TO DO: allow user to select languages
+          main_lang: this.mainLang,
           extra_lang: [], // TO DO: allow user to select languages
           diarize: this.diarize
         };
@@ -266,7 +270,7 @@ export class RecordComponent {
         }
 
         const sendMeta = this.session.setRecordingMetadata(metadata).then(() => {
-          this.upload.uploadToken(BACKEND_URL + '/transcription', uploadRecRes.name, "en-US", [], 
+          this.upload.uploadToken(BACKEND_URL + '/transcription', uploadRecRes.name, this.mainLang, [], 
                                   this.diarize, this.autoDetect, this.noSpeakers).then((res: TokenUploadResponse) => {
             this.processStatus = res;
             if (res.status === 'PROCESS_STARTED') {

@@ -26,8 +26,17 @@
     </audio>
     <!-- transcription settings -->
     <form id="saveForm" #saveForm="ngForm" (ngSubmit)="onSubmit()">
-      <!-- ask if diarization required -->
+      <!-- allow user to select recording language -->
       <div mat-line>
+        <mat-form-field>
+          <mat-label>Recording language</mat-label>
+          <mat-select [(ngModel)]="mainLang" name="mainLang">
+            <mat-option *ngFor="let lang of RECORD_LANGUAGES" [value]="lang.value">{{lang.label}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!-- ask if diarization required -->
+      <div mat-line *ngIf="mainLang == 'en-US'">
         <mat-slide-toggle [(ngModel)]="diarize" name="diarize">Enable diarization</mat-slide-toggle>
         <!-- select diarization mode -->
         <div *ngIf="diarize">

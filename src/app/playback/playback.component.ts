@@ -55,8 +55,8 @@ export class PlaybackComponent implements OnDestroy, OnInit {
    */
   openRecordDialog() {
     const recordDialogRef = this.recordDialog.open(RecordComponent, {
-      height: '250px',
-      width: '500px'
+      height: '320px',
+      width: '550px'
     });
   }
 
