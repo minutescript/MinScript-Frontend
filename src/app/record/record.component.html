@@ -24,12 +24,26 @@
     <audio class="e2e-iframe-trusted-src" id="player" controls [src]="trustedURL">
       Your browser does not support the <code>audio</code> element.
     </audio>
-    <!-- allow user to give a title to a recording -->
-    <form id="saveForm">
+    <!-- transcription settings -->
+    <form id="saveForm" #saveForm="ngForm" (ngSubmit)="onSubmit()">
+      <!-- ask if diarization required -->
+      <div mat-line>
+        <mat-slide-toggle [(ngModel)]="diarize" name="diarize">Enable diarization</mat-slide-toggle>
+        <!-- select diarization mode -->
+        <div *ngIf="diarize">
+          <mat-slide-toggle [(ngModel)]="autoDetect" name="autoDetect">Auto-detect number of speakers (experimental)</mat-slide-toggle>
+          <div mat-line *ngIf="!autoDetect">
+            <mat-form-field>
+              <input matInput type="number" [(ngModel)]="noSpeakers" name="noSpeakers" placeholder="Number of speakers" required />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <!-- allow user to give a title to a recording -->
       <mat-form-field>
-        <input #recTitle (keyup.enter)="passTitle(recTitle.value, finalBlob)" matInput placeholder="Recording title">
+        <input (keyup.enter)="onSubmit()" matInput [(ngModel)]="recordTitle" name="recordTitle" placeholder="Recording title">
       </mat-form-field>
-      <button mat-raised-button color="accent" (click)="passTitle(recTitle.value, finalBlob)">Upload</button>
+      <button mat-raised-button color="accent" type="submit" [disabled]="!saveForm.form.valid">Upload</button>
       <button mat-raised-button (click)="cancelRecord()">Cancel</button>
     </form>
   </div>

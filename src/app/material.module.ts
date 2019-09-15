@@ -5,7 +5,7 @@ import {
   MatFormFieldModule, MatIconModule,
   MatInputModule, MatListModule, MatMenuModule,
   MatProgressBarModule, MatProgressSpinnerModule, MatSidenavModule, MatSnackBarModule, MatTabsModule,
-  MatToolbarModule, MatTooltipModule
+  MatToolbarModule, MatTooltipModule, MatSlideToggleModule
 } from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -37,7 +37,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatCheckboxModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatSlideToggleModule
   ],
   exports: [
     MatToolbarModule,
@@ -58,7 +59,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatCheckboxModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatSlideToggleModule
   ]
 })
 export class MaterialModule { }

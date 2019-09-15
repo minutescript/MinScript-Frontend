@@ -104,14 +104,27 @@ export class UploadService {
    * @version 29/06/2019
    *
    * @param backend endpoint URL
-   * @param fileName  name of the file to be transcribed
+   * @param file_name  name of the file to be transcribed
+   * @param main_lang main language of the recording
+   * @param extra_lang array of up to three additional languages present in the recording
+   * @param diarize whether speaker diarization enabled
+   * @param auto_detect true if Speech API should automatically detect number of speakers
+   * @param no_speakers (optional) if speakers not automatically detected, number of speakers needs to be provided here
    */
-  uploadToken(destination: string, fileName: string): Promise<TokenUploadResponse> {
+  uploadToken(destination: string, file_name: string, main_lang: string, 
+    extra_lang: string[], diarize: boolean, auto_detect: boolean, no_speakers?: number): Promise<TokenUploadResponse> {
     return new Promise<any>(resolve => {
       // add ID token to the Authorization header of the request
       const authHeaders = new HttpHeaders().append('Authorization', this.session.getToken());
+      // convert boolean to strings to avoid bad request error
+      const diarizeStr = diarize ? "true" : "false";
+      const auto_detectStr = auto_detect ? "true" : "false";
       // post information to the backend
-      this.http.post(destination, {fileName}, {headers: authHeaders}).subscribe((res: Response) => {
+      const token = {file_name, main_lang, extra_lang, diarize: diarizeStr, auto_detect: auto_detectStr, no_speakers}
+      // use for debugging
+      // console.log(token);
+      this.http.post(destination, token, {headers: authHeaders})
+      .subscribe((res: Response) => {
         // return upload status
         resolve({status: res.status, idToken: this.session.getToken()});
         }, err => {

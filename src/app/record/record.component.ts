@@ -35,7 +35,7 @@ export class RecordComponent {
   public isRecording = false;
   public audioCtx: AudioContext;
   public currentRecordingTime: string;
-  public recordTitle: string;
+  public recordTitle: string; // stores recording title given by user
   public showSaveDialog = false;
   private finalBlob: any;
   public blobURL: string;
@@ -49,6 +49,9 @@ export class RecordComponent {
   private preventTabClosing = false;
   public uploadSelected = false;
   private audioRecorder: any;
+  private diarize = false; // true if user wants to diarize the recording
+  private autoDetect = false; // true if user wants to automatically detect number of speakers
+  private noSpeakers = 2; // default number of speakers
 
   /**
    * Constructor adds event listener to prevent accidental tab closure during recording.
@@ -179,7 +182,7 @@ export class RecordComponent {
     this.trustedURL = this.sanitizer.bypassSecurityTrustResourceUrl(this.blobURL);
   }
 
-  /**
+  /*
    * Adds user-defined title to the recording and initiates upload
    *
    * @author Matt Grabara
@@ -188,10 +191,22 @@ export class RecordComponent {
    * @param title user-defined title of the recording
    * @param blob  blob with the recording
    */
-  passTitle(title: string, blob: Blob) {
+  /* passTitle(title: string, blob: Blob) {
     this.recordTitle = title;
     this.showSaveDialog = false;
     this.uploadRecordingFunc(blob);
+    this.audioCtx.close();
+  } */
+
+  /**
+   * Event handler for submit button in the save recording form
+   * 
+   * @author Matt Grabara
+   * @version 14/09/2019
+   */
+  onSubmit() {
+    this.showSaveDialog = false;
+    this.uploadRecordingFunc(this.finalBlob);
     this.audioCtx.close();
   }
 
@@ -209,6 +224,10 @@ export class RecordComponent {
     this.trustedURL = null;
     this.recordDialog.disableClose = false;
     this.preventTabClosing = false;
+    this.diarize = false;
+    this.autoDetect = false;
+    this.noSpeakers = 2;
+    this.recordTitle = '';
   }
 
   /**
@@ -228,20 +247,27 @@ export class RecordComponent {
       this.showUploadProgress = false;
       this.showProcessing = true;
       this.getAudioDuration(blob).then((duration) => {
-        if (this.recordTitle === null) {this.recordTitle = uploadRecRes.name; }
-        const metadata = {
+        if (this.recordTitle === '') {this.recordTitle = uploadRecRes.name; }
+        let metadata = {
           timestamp: new Date(uploadRecRes.timeCreated),
           length: duration,
           format: 'audio/wave',
           size: Math.ceil(uploadRecRes.size / (1024 * 1024)),
           uri: 'gs://minutescript/' + uploadRecRes.fullPath,
           file_name: uploadRecRes.name,
-          title: this.recordTitle
+          title: this.recordTitle,
+          main_lang: "en-US", // TO DO: allow user to select languages
+          extra_lang: [], // TO DO: allow user to select languages
+          diarize: this.diarize
         };
 
+        if (this.diarize && !this.autoDetect) {
+          metadata['no_speakers'] = this.noSpeakers;
+        }
+
         const sendMeta = this.session.setRecordingMetadata(metadata).then(() => {
-          this.upload.uploadToken(BACKEND_URL + '/transcription', uploadRecRes.name)
-            .then((res: TokenUploadResponse) => {
+          this.upload.uploadToken(BACKEND_URL + '/transcription', uploadRecRes.name, "en-US", [], 
+                                  this.diarize, this.autoDetect, this.noSpeakers).then((res: TokenUploadResponse) => {
             this.processStatus = res;
             if (res.status === 'PROCESS_STARTED') {
               this.showProcessing = false;

@@ -67,6 +67,8 @@ export class UserSessionService {
 
           user.getIdToken().then(idToken => {
             if (idToken) {
+              // use for debugging
+              // console.log(idToken);
               this.idToken = idToken;
             }
           });
