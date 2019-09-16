@@ -28,19 +28,22 @@
     <form id="saveForm" #saveForm="ngForm" (ngSubmit)="onSubmit()">
       <!-- allow user to select recording language -->
       <div mat-line>
-        <mat-form-field>
-          <mat-label>Recording language</mat-label>
-          <mat-select [(ngModel)]="mainLang" name="mainLang">
-            <mat-option *ngFor="let lang of RECORD_LANGUAGES" [value]="lang.value">{{lang.label}}</mat-option>
-          </mat-select>
-        </mat-form-field>
+        <mat-slide-toggle [(ngModel)]="notEnglish" name="notEnglish" (change)="resetDefaultLang()">The recording is not in English <em>(experimental)</em></mat-slide-toggle>
+        <div *ngIf="notEnglish">
+          <mat-form-field>
+            <mat-label>Select language</mat-label>
+            <mat-select [(ngModel)]="mainLang" name="mainLang" required>
+              <mat-option *ngFor="let lang of RECORD_LANGUAGES" [value]="lang.value">{{lang.label}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </div>
       <!-- ask if diarization required -->
-      <div mat-line *ngIf="mainLang == 'en-US'">
+      <div mat-line *ngIf="!notEnglish">
         <mat-slide-toggle [(ngModel)]="diarize" name="diarize">Enable diarization</mat-slide-toggle>
         <!-- select diarization mode -->
         <div *ngIf="diarize">
-          <mat-slide-toggle [(ngModel)]="autoDetect" name="autoDetect">Auto-detect number of speakers (experimental)</mat-slide-toggle>
+          <mat-slide-toggle [(ngModel)]="autoDetect" name="autoDetect">Auto-detect number of speakers <em>(experimental)</em></mat-slide-toggle>
           <div mat-line *ngIf="!autoDetect">
             <mat-form-field>
               <input matInput type="number" [(ngModel)]="noSpeakers" name="noSpeakers" placeholder="Number of speakers" required />

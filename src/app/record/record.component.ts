@@ -54,6 +54,8 @@ export class RecordComponent {
   private autoDetect = false; // true if user wants to automatically detect number of speakers
   private noSpeakers = 2; // default number of speakers
   private mainLang = 'en-US'; // default recognition language
+  private notEnglish = false; // enabled recognition in other languages
+  private lastLang: string; // for the convenience of the undecided end user
   readonly RECORD_LANGUAGES = RECORD_LANGUAGES; // make constant visible to the template
 
   /**
@@ -186,21 +188,14 @@ export class RecordComponent {
     this.trustedURL = this.sanitizer.bypassSecurityTrustResourceUrl(this.blobURL);
   }
 
-  /*
-   * Adds user-defined title to the recording and initiates upload
-   *
-   * @author Matt Grabara
-   * @version 29/06/2019
-   *
-   * @param title user-defined title of the recording
-   * @param blob  blob with the recording
-   */
-  /* passTitle(title: string, blob: Blob) {
-    this.recordTitle = title;
-    this.showSaveDialog = false;
-    this.uploadRecordingFunc(blob);
-    this.audioCtx.close();
-  } */
+  resetDefaultLang() {
+    if (!this.notEnglish) {
+      this.lastLang = this.mainLang;
+      this.mainLang = 'en-US';
+    } else if (this.lastLang) {
+      this.mainLang = this.lastLang;
+    }
+  }
 
   /**
    * Event handler for submit button in the save recording form
