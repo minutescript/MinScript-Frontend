@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {BACKEND_URL} from '../backend-config'; // edit this file to add your backend URL
 

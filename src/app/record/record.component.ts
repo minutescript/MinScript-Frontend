@@ -6,7 +6,8 @@ import {Component, ViewChild} from '@angular/core';
 
 
 import {DomSanitizer} from '@angular/platform-browser';
-import {MatDialogRef, MatSnackBar} from '@angular/material';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {UploadService} from '../services/upload.service';
 import {UserSessionService} from '../services/user-session.service';
 import {TokenUploadResponse} from '../interfaces/token-upload-response';
