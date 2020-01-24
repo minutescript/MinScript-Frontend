@@ -28,7 +28,7 @@
     "firebase": "^7.6.2",
     "firebase-admin": "^5.8.2",
     "lunr": "^2.3.6",
-    "rxjs": "^6.5.2",
+    "rxjs": "^6.5.4",
     "shortid": "^2.2.14",
     "zone.js": "~0.9.1"
   },
