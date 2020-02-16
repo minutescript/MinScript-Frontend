@@ -23,7 +23,7 @@ import {ResultEntry} from '../interfaces/result-entry';
 })
 export class PlaybackComponent implements OnDestroy, OnInit {
   // defining references to native elements
-  @ViewChild('player', {static: false}) player;
+  @ViewChild('player') player;
   @ViewChild('sidenav', {static: true}) sidenav;
 
   public currentItem: Item; // currently selected item
