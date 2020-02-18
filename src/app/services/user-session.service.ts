@@ -230,7 +230,7 @@ export class UserSessionService {
    * @author Matt Grabara
    * @version 18/02/2020
    */
-  getUsedinutes(): number {
+  getUsedMinutes(): number {
     return this.userMetadata.used_minutes;
   }
 
