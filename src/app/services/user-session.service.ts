@@ -215,6 +215,26 @@ export class UserSessionService {
   }
 
   /**
+   * Getter for the number of minutes assigned to the user in the current billing cycle.
+   *
+   * @author Matt Grabara
+   * @version 18/02/2020
+   */
+  getAssignedMinutes(): number {
+    return this.userMetadata.assigned_minutes;
+  }
+
+  /**
+   * Getter for the number of minutes consumed by the user in the current billing cycle.
+   *
+   * @author Matt Grabara
+   * @version 18/02/2020
+   */
+  getUsedinutes(): number {
+    return this.userMetadata.used_minutes;
+  }
+
+  /**
    * Retrieves file's URL from the cloud storage URI.
    *
    * @author Matt Grabara

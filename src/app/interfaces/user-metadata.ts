@@ -10,4 +10,6 @@ export interface UserMetadata {
   enabled: boolean;
   max_num_recordings: number;
   num_recordings: number;
+  assigned_minutes: number;
+  used_minutes: number;
 }
