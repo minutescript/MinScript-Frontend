@@ -199,6 +199,7 @@ export class UserSessionService {
    *
    * @author Matt Grabara
    * @version 29/06/2019
+   * @deprecated
    */
   getNumRecordings() {
     return this.userMetadata.num_recordings;
@@ -209,6 +210,7 @@ export class UserSessionService {
    *
    * @author Matt Grabara
    * @version 29/06/2019
+   * @deprecated
    */
   getMaxNumRecordings(): number {
     return this.userMetadata.max_num_recordings;

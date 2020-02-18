@@ -58,6 +58,8 @@ export class RecordComponent {
   private notEnglish = false; // enabled recognition in other languages
   private lastLang: string; // for the convenience of the undecided end user
   readonly RECORD_LANGUAGES = RECORD_LANGUAGES; // make constant visible to the template
+  private recordedMinutes: number; // recording time for billing purposes
+  private reachedLimit = false; // when true, info displayed user reached number of available minutes
 
   /**
    * Constructor adds event listener to prevent accidental tab closure during recording.
@@ -161,6 +163,13 @@ export class RecordComponent {
 
     // initialise recording timer
     observableInterval(100).pipe(takeWhile(() => this.isRecording)).subscribe(i => {
+      // for billing
+      this.recordedMinutes = Math.floor(this.audioCtx.currentTime / 60);
+      if (this.recordedMinutes == this.session.getAssignedMinutes() - this.session.getUsedMinutes()) {
+        this.clickStopBtn();
+        this.reachedLimit = true;
+      }
+      // for display
       this.currentRecordingTime = this.getCurrentRecordingTime();
     });
     // initialise audio recorder
@@ -172,6 +181,17 @@ export class RecordComponent {
       this.onRecordingReadyToUpload(blob);
     };
 
+  }
+
+  /**
+   * Shares with the UI whether credit limit was reached
+   *
+   * @author Matt Grabara
+   * @version 18/02/2020
+   * 
+   */
+  isLimitReached() {
+    return this.reachedLimit;
   }
 
   /**
@@ -228,6 +248,7 @@ export class RecordComponent {
     this.autoDetect = false;
     this.noSpeakers = 2;
     this.recordTitle = '';
+    this.reachedLimit = false;
   }
 
   /**
@@ -276,6 +297,7 @@ export class RecordComponent {
               this.showComplete = true;
               this.recordDialog.disableClose = true;
               this.preventTabClosing = false;
+              this.reachedLimit = false;
               this.recordDialog.close();
             } else if (this.processStatus.status === 'FILE_NOT_FOUND') {
               this.snackBar.open('File not found!', '', {

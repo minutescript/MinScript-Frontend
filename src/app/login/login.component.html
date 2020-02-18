@@ -11,8 +11,8 @@
     <button mat-menu-item *ngIf="this.isUserEnabled()">
       <mat-icon>mic</mat-icon>
       <span [style.vertical-align]="'middle'">
-        {{ getNumAvailableRecordings() }}/{{ getMaxNumRecordings() }}
-        &nbsp;Free Recordings <!-- &nbsp; added to make clear whitespace should be here -->
+        {{ getAvailableMinutes() }}/{{ getAssignedMinutes() }}
+        &nbsp;available minutes <!-- &nbsp; added to make clear whitespace should be here -->
       </span>
     </button>
     <!-- settings button, not yet implemented -->

@@ -26,6 +26,7 @@ export class LoginComponent {
 
   /**
    * Retrieves numbers of recordings assigned to the user.
+   * @deprecated
    */
   getMaxNumRecordings() {
     return this.session.getMaxNumRecordings();
@@ -33,9 +34,24 @@ export class LoginComponent {
 
   /**
    * Retrieves number of recordings made by the user.
+   * @deprecated
    */
   getNumAvailableRecordings() {
     return this.session.getMaxNumRecordings() - this.session.getNumRecordings();
+  }
+  
+  /**
+   * Retrieves numbers of minutes assigned in the current billing cycle.
+   */
+  getAssignedMinutes() {
+    return this.session.getAssignedMinutes();
+  }
+
+  /**
+   * Retrieves number of minutes available to the user.
+   */
+  getAvailableMinutes() {
+    return this.session.getAssignedMinutes() - this.session.getUsedMinutes();
   }
 
   /**

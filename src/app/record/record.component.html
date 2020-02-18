@@ -20,6 +20,9 @@
   </div>
   <!-- when recording finished or file picked, show save dialog -->
   <div *ngIf="showSaveDialog">
+    <div *ngIf="isLimitReached()">
+      <em>Your recording was interrupted due to insufficient credit.</em>
+    </div>
     <!-- audio element to listen to the recording before upload -->
     <audio class="e2e-iframe-trusted-src" id="player" controls [src]="trustedURL">
       Your browser does not support the <code>audio</code> element.
