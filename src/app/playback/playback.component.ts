@@ -94,10 +94,10 @@ export class PlaybackComponent implements OnDestroy, OnInit {
    * Checks whether user is allowed to record.
    *
    * @author Matt Grabara
-   * @version 29/06/2019
+   * @version 22/02/2020
    */
   canRecord(): boolean {
-    return  (this.session.getNumRecordings() < this.session.getMaxNumRecordings())
+    return  (this.session.getAssignedMinutes() > this.session.getUsedMinutes())
       && this.session.isUserEnabled();
   }
 

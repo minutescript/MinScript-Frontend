@@ -147,7 +147,7 @@ export class RecordComponent {
    * Starts recording.
    *
    * @author Matt Grabara
-   * @version 29/06/2019
+   * @version 22/02/2020
    *
    * @param stream  stream object passed by mediaDevices.getUserMedia
    */
@@ -166,8 +166,8 @@ export class RecordComponent {
       // for billing
       this.recordedMinutes = Math.floor(this.audioCtx.currentTime / 60);
       if (this.recordedMinutes == this.session.getAssignedMinutes() - this.session.getUsedMinutes()) {
-        this.clickStopBtn();
         this.reachedLimit = true;
+        this.clickStopBtn();
       }
       // for display
       this.currentRecordingTime = this.getCurrentRecordingTime();

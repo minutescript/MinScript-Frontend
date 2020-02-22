@@ -3,13 +3,14 @@
  * <br />Should be changed only when the data model is modified.
  *
  * @author  Matt Grabara
- * @version 29/06/2019
+ * @version 22/02/2020
  */
 export interface UserMetadata {
   accepted_tcs: Date;
   enabled: boolean;
-  max_num_recordings: number;
-  num_recordings: number;
+//  DEPRECATED:
+//  max_num_recordings: number;
+//  num_recordings: number;
   assigned_minutes: number;
   used_minutes: number;
 }

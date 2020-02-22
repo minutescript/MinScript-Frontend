@@ -23,22 +23,6 @@ export class LoginComponent {
    * @param session reference to the UserSessionService
    */
   constructor(private session: UserSessionService) { }
-
-  /**
-   * Retrieves numbers of recordings assigned to the user.
-   * @deprecated
-   */
-  getMaxNumRecordings() {
-    return this.session.getMaxNumRecordings();
-  }
-
-  /**
-   * Retrieves number of recordings made by the user.
-   * @deprecated
-   */
-  getNumAvailableRecordings() {
-    return this.session.getMaxNumRecordings() - this.session.getNumRecordings();
-  }
   
   /**
    * Retrieves numbers of minutes assigned in the current billing cycle.

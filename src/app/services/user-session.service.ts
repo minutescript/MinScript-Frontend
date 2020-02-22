@@ -108,7 +108,7 @@ export class UserSessionService {
    * Checks whether account is active and T&Cs accepted.
    *
    * @author Matt Grabara
-   * @version 29/06/2019
+   * @version 22/02/2020
    *
    * @param userMetadata  user metadata
    */
@@ -126,8 +126,8 @@ export class UserSessionService {
         });
       }
 
-      if (userMetadata.num_recordings === userMetadata.max_num_recordings) {
-        this.snackBar.open('You have reached maximum number of recordings for your account!', '', {
+      if (userMetadata.used_minutes === userMetadata.assigned_minutes) {
+        this.snackBar.open('You have no credits left for recording!', '', {
           duration: 5000,
         });
       }
@@ -192,28 +192,6 @@ export class UserSessionService {
    */
   getToken(): string {
     return this.idToken;
-  }
-
-  /**
-   * Getter for the number of recordings user has already recorded.
-   *
-   * @author Matt Grabara
-   * @version 29/06/2019
-   * @deprecated
-   */
-  getNumRecordings() {
-    return this.userMetadata.num_recordings;
-  }
-
-  /**
-   * Getter for the maximum number of recordings available to the user.
-   *
-   * @author Matt Grabara
-   * @version 29/06/2019
-   * @deprecated
-   */
-  getMaxNumRecordings(): number {
-    return this.userMetadata.max_num_recordings;
   }
 
   /**
