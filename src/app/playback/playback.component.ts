@@ -192,6 +192,19 @@ export class PlaybackComponent implements OnDestroy, OnInit {
     return true;
   }
 
+  deleteRecording(item: Item) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    if (item == this.currentItem) {
+      let navigateIndex = 0;
+      if (item == this.session.getItemArray[0])
+        navigateIndex = 1;
+      this.setCurrent(this.session.getItemArray()[navigateIndex])
+      this.router.navigate(['/', this.session.getItemArray()[navigateIndex].file_name.split('.')[0]]);
+    }
+      
+    this.session.deleteRecording(item);
+  }
   /**
    * Prepares component view, checks for a recording parameter passed in the URL
    *
