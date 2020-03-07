@@ -1,0 +1,8 @@
+<h2 mat-dialog-title>Are you sure you want to delete the recording <em>{{item.title}}</em>?</h2>
+<mat-dialog-content class="mat-typography">
+This operation is irreversible and credits used to transcribe this recording are irrecoverable!
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button color='warn' mat-raised-button (click)='deleteItem(this.item)'>Yes</button>
+    <button mat-button (click)='this.deleteDialog.close()'>No</button>
+</mat-dialog-actions>

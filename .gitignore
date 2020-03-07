@@ -4,6 +4,10 @@
 firebase-config.ts
 backend-config.ts
 
+# Firebase config
+.firebaserc
+firebase.json
+
 # compiled output
 /dist
 /tmp

@@ -75,6 +75,8 @@
               <p mat-line class="mat-line">{{item.timestamp.toDate().toDateString()}} {{item.timestamp.toDate().toLocaleTimeString()}}</p>
               <!-- recording length -->
               <p mat-line class="mat-line">{{this.getPlayTime(item.length)}}</p>
+              <!-- delete button -->
+              <button mat-button (click)='deleteRecording(item)' *ngIf="item.transcript_status!='processing'"><mat-icon matTooltip="Delete recording">delete</mat-icon></button>
               <!-- transcription status -->
               <mat-icon *ngIf="item.transcript_status=='success'" matTooltip="Transcription complete">done</mat-icon>
               <mat-icon *ngIf="item.transcript_status==null
