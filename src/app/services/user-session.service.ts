@@ -137,7 +137,7 @@ export class UserSessionService {
   }
 
   deleteRecording(item: Item) {
-    this.afStorage.storage.refFromURL(item.uri).delete().then(() => {
+    return this.afStorage.storage.refFromURL(item.uri).delete().then(() => {
       this.db.collection('users').doc(this.uid)
                 .collection<Item>('recordings').doc(item.file_name).delete();
     })

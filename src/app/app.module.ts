@@ -16,6 +16,7 @@ import { LoginComponent } from './login/login.component';
 import { RecordComponent } from './record/record.component';
 import { PlaybackComponent } from './playback/playback.component';
 import { TermsDialogComponent } from './terms-dialog/terms-dialog.component';
+import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 
 const appRoutes: Routes = [
   { path: '', component: PlaybackComponent, pathMatch: 'full' },
@@ -28,6 +29,7 @@ const appRoutes: Routes = [
     RecordComponent,
     PlaybackComponent,
     TermsDialogComponent,
+    DeleteDialogComponent,
   ],
   imports: [
     BrowserModule,

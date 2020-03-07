@@ -8,6 +8,7 @@ import {Item} from '../interfaces/item';
 import {UserSessionService} from '../services/user-session.service';
 import {SearchService} from '../services/search.service';
 import {ResultEntry} from '../interfaces/result-entry';
+import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 
 /**
  * Component defining playback area of the app, including transcript list, transcripts and audio player.
@@ -45,7 +46,7 @@ export class PlaybackComponent implements OnDestroy, OnInit {
    * @param router  reference to the Angular Router module providing possibility for navigation without refresh
    */
   constructor(private session: UserSessionService, private cdRef: ChangeDetectorRef, private search: SearchService,
-              private snackBar: MatSnackBar, private recordDialog: MatDialog, private route: ActivatedRoute, private router: Router) {
+              private snackBar: MatSnackBar, private recordDialog: MatDialog, private deleteDialog: MatDialog, private route: ActivatedRoute, private router: Router) {
   }
 
   /**
@@ -195,15 +196,21 @@ export class PlaybackComponent implements OnDestroy, OnInit {
   deleteRecording(item: Item) {
     event.preventDefault();
     event.stopImmediatePropagation();
-    if (item == this.currentItem) {
-      let navigateIndex = 0;
-      if (item == this.session.getItemArray[0])
-        navigateIndex = 1;
-      this.setCurrent(this.session.getItemArray()[navigateIndex])
-      this.router.navigate(['/', this.session.getItemArray()[navigateIndex].file_name.split('.')[0]]);
-    }
-      
-    this.session.deleteRecording(item);
+    const deleteDialogRef = this.deleteDialog.open(DeleteDialogComponent, {
+      height: '320px',
+      width: '320px',
+      data: item
+    });
+
+    deleteDialogRef.afterClosed().subscribe(result => {
+      if ((result === 'SUCCESS') && (item == this.currentItem)) {
+        let navigateIndex = 0;
+        if (item == this.session.getItemArray[0])
+          navigateIndex = 1;
+        this.setCurrent(this.session.getItemArray()[navigateIndex])
+        this.router.navigate(['/', this.session.getItemArray()[navigateIndex].file_name.split('.')[0]]);
+      }
+    });
   }
   /**
    * Prepares component view, checks for a recording parameter passed in the URL
