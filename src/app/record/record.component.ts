@@ -13,7 +13,7 @@ import {UserSessionService} from '../services/user-session.service';
 import {TokenUploadResponse} from '../interfaces/token-upload-response';
 
 import {RECORD_LANGUAGES} from '../settings/record-languages';
-import {BACKEND_URL} from '../backend-config'; // edit this file to add your backend URL
+import {BACKEND_URL} from '../settings/backend-config'; // edit this file to add your backend URL
 
 // declaring WebAudioRecorder imported in index.html
 declare var WebAudioRecorder;
