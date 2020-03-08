@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {BACKEND_URL} from '../backend-config'; // edit this file to add your backend URL
+import {BACKEND_URL} from '../settings/backend-config'; // edit this file to add your backend URL
 
 // simple interface for handling ID tokens received from the dialog caller
 export interface IDToken {
