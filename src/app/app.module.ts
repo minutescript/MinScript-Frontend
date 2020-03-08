@@ -8,7 +8,7 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireStorageModule } from '@angular/fire/storage';
-import { MaterialModule } from './material.module';
+import { MaterialModule } from './material';
 import { FirebaseConfig } from './firebase-config';
 
 import { AppComponent } from './app.component';
