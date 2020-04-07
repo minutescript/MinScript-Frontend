@@ -34,14 +34,17 @@ export class UploadService {
    *
    * @param inputBlob blob with the recording to upload
    */
-  uploadRecording(inputBlob: Blob): Promise<any> {
+  uploadRecording(inputBlob: Blob, contentType: string): Promise<any> {
     return new Promise((resolve) => {
+      let extension = 'wav';
+      if (contentType == 'audio/mp4')
+        extension = 'm4a';
 
       const storageRef = this.afStorage.storage.ref();
-      const fileName = shortid.generate() + '.wav';
+      const fileName = shortid.generate() + '.' + extension;
 
       const audioChild = storageRef.child('recordings/' + auth().currentUser.uid + '/' + fileName);
-      const metadata = { contentType: 'audio/wave' };
+      const metadata = { contentType};
       const uploadTask = audioChild.put(inputBlob, metadata);
 
       // handle upload task event

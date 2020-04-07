@@ -2,7 +2,7 @@
 import {interval as observableInterval} from 'rxjs';
 
 import { takeWhile } from 'rxjs/operators';
-import {Component, ViewChild} from '@angular/core';
+import {Component, ViewChild, ElementRef} from '@angular/core';
 
 
 import {DomSanitizer} from '@angular/platform-browser';
@@ -31,7 +31,7 @@ declare var WebAudioRecorder;
 })
 
 export class RecordComponent {
-  @ViewChild('fileSelector', {static: true}) fileSelector;
+  @ViewChild('fileSelector', {static: false}) fileSelector: ElementRef;
 
   private ms: any;
   public isRecording = false;
@@ -60,6 +60,8 @@ export class RecordComponent {
   readonly RECORD_LANGUAGES = RECORD_LANGUAGES; // make constant visible to the template
   private recordedMinutes: number; // recording time for billing purposes
   private reachedLimit = false; // when true, info displayed user reached number of available minutes
+  private conversionNeeded = false;
+  private duration: number;
 
   /**
    * Constructor adds event listener to prevent accidental tab closure during recording.
@@ -108,15 +110,19 @@ export class RecordComponent {
   }
 
   /**
-   * Handles upload of the user-provided recording file.
+   * Handles upload of the user-provided recording file for conversion.
    *
    * @author Matt Grabara
-   * @version 29/06/2019
+   * @version 04/04/2020
    */
   uploadRecordingBtn() {
+    this.uploadSelected = false;
+    this.showRecordBtn = false;
+    this.conversionNeeded = true;
     const fileSelected = this.fileSelector.nativeElement.files[0];
     this.onRecordingReadyToUpload(fileSelected);
   }
+
 
   /**
    * Retrieves length of the recording in seconds.
@@ -195,6 +201,21 @@ export class RecordComponent {
   }
 
   /**
+   * Checks if there is enough credits to precess the recording.
+   *
+   * @author Matt Grabara
+   * @version 07/04/2020
+   * 
+   */
+  sufficientCredits() {
+    const availableMinutes = this.session.getAssignedMinutes() - this.session.getUsedMinutes();
+    const availableSeconds = availableMinutes * 60;
+    if (availableSeconds >= this.duration)
+      return true;
+    return false;
+  }
+
+  /**
    * Event handler for completed recording
    *
    * @author Matt Grabara
@@ -205,6 +226,9 @@ export class RecordComponent {
   onRecordingReadyToUpload(blob: Blob) {
     this.showSaveDialog = true;
     this.finalBlob = blob;
+    this.getAudioDuration(this.finalBlob).then(duration => {
+      this.duration = duration;
+    });
     this.blobURL = URL.createObjectURL(blob);
     this.trustedURL = this.sanitizer.bypassSecurityTrustResourceUrl(this.blobURL);
   }
@@ -225,9 +249,12 @@ export class RecordComponent {
    * @version 14/09/2019
    */
   onSubmit() {
+    // continue work from here
     this.showSaveDialog = false;
     this.uploadRecordingFunc(this.finalBlob);
-    this.audioCtx.close();
+    if (this.audioCtx) {
+      this.audioCtx.close();
+    }
   }
 
   /**
@@ -249,6 +276,7 @@ export class RecordComponent {
     this.noSpeakers = 2;
     this.recordTitle = '';
     this.reachedLimit = false;
+    this.conversionNeeded = false;
   }
 
   /**
@@ -263,8 +291,13 @@ export class RecordComponent {
   uploadRecordingFunc(blob: Blob) {
     this.uploadSelected = false;
     this.showUploadProgress = true;
+    let contentType = 'audio/wave';
 
-    this.upload.uploadRecording(blob).then(uploadRecRes => {
+    if (this.conversionNeeded) {
+      contentType = 'audio/mp4';
+    }
+
+    this.upload.uploadRecording(blob, contentType).then(uploadRecRes => {
       this.showUploadProgress = false;
       this.showProcessing = true;
       this.getAudioDuration(blob).then((duration) => {
@@ -272,7 +305,7 @@ export class RecordComponent {
         let metadata = {
           timestamp: new Date(uploadRecRes.timeCreated),
           length: duration,
-          format: 'audio/wave',
+          format: contentType,
           size: Math.ceil(uploadRecRes.size / (1024 * 1024)),
           uri: 'gs://minutescript/' + uploadRecRes.fullPath,
           file_name: uploadRecRes.name,
@@ -298,6 +331,7 @@ export class RecordComponent {
               this.recordDialog.disableClose = true;
               this.preventTabClosing = false;
               this.reachedLimit = false;
+              this.conversionNeeded = false;
               this.recordDialog.close();
             } else if (this.processStatus.status === 'FILE_NOT_FOUND') {
               this.snackBar.open('File not found!', '', {

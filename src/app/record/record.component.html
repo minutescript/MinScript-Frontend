@@ -6,7 +6,7 @@
             color="accent" (click)="clickRecordBtn()">Start recording</button>
     <!-- show upload recording button -->
     <button mat-raised-button id="openUploadDialogBtn"
-            color="accent" (click)="uploadDialogBtn()">Upload recording</button>
+            color="accent" (click)="uploadDialogBtn()">Upload from Zoom</button>
     <!-- if Upload recording button clicked, show file picker -->
     <div id="uploadDialog" *ngIf="uploadSelected">
       <input #fileSelector type="file" id="fileSelector" name="fileUpload">
@@ -22,6 +22,9 @@
   <div *ngIf="showSaveDialog">
     <div *ngIf="isLimitReached()">
       <em>Your recording was interrupted due to insufficient credit.</em>
+    </div>
+    <div *ngIf="!sufficientCredits()">
+      <em>Insufficient credits to process the recording.</em>
     </div>
     <!-- audio element to listen to the recording before upload -->
     <audio class="e2e-iframe-trusted-src" id="player" controls [src]="trustedURL">
@@ -58,7 +61,7 @@
       <mat-form-field>
         <input (keyup.enter)="onSubmit()" matInput [(ngModel)]="recordTitle" name="recordTitle" placeholder="Recording title">
       </mat-form-field>
-      <button mat-raised-button color="accent" type="submit" [disabled]="!saveForm.form.valid">Upload</button>
+      <button mat-raised-button color="accent" type="submit" [disabled]="!saveForm.form.valid || !this.sufficientCredits()">Upload</button>
       <button mat-raised-button (click)="cancelRecord()">Cancel</button>
     </form>
   </div>
