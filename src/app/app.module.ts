@@ -48,6 +48,6 @@ const appRoutes: Routes = [
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [RecordComponent, TermsDialogComponent]
+  entryComponents: [RecordComponent, TermsDialogComponent, DeleteDialogComponent]
 })
 export class AppModule { }
