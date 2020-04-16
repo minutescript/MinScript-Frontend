@@ -1,6 +1,6 @@
 <!-- *ngIf makes sure everything is loaded before loading the rest of the component.
       This means item must be selected and its audio URL acquired. -->
-<div *ngIf="getAudioSrc()">
+<div *ngIf="this.getAudioSrc()">
 
   <!-- defining area split between main area and initially hidden sidenav -->
   <mat-sidenav-container>
@@ -88,4 +88,9 @@
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
+</div>
+<div *ngIf="this.isPromptDisplayed()">
+  <button mat-raised-button *ngIf="this.canRecord()" color="warn" (click)="this.openRecordDialog()">
+    <mat-icon>add</mat-icon> Add your first recording
+  </button>
 </div>

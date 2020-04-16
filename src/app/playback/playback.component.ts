@@ -30,6 +30,21 @@ export class PlaybackComponent implements OnDestroy, OnInit {
   public currentItem: Item; // currently selected item
   private audioSrc: string; // URL of the recording of the currently selected item
   private lastSpeaker: number; // if diarization enabled, store ID of the last speaker
+  private initialised = false; // true if metadata available
+  private playlistEmpty = false; // true if anything on the playlist
+  private displayPrompt = false; // true if new prompt needs to be displayed
+  private emptyItem: Item = {
+    file_name: '',
+    format: '',
+    length: 0,
+    size: 0,
+    timestamp: null,
+    transcript: '',
+    transcript_status: '',
+    uri: '',
+    word_ts: null,
+    title: ''
+  };
 
   /**
    * Constructor injecting services and modules.
@@ -59,6 +74,10 @@ export class PlaybackComponent implements OnDestroy, OnInit {
     const recordDialogRef = this.recordDialog.open(RecordComponent, {
       height: '320px',
       width: '550px'
+    }).afterClosed().subscribe(result => {
+      if (result == 'PROCESS_STARTED' && !this.getAudioSrc()) {
+        this.displayPrompt = false;
+      }
     });
   }
 
@@ -193,6 +212,14 @@ export class PlaybackComponent implements OnDestroy, OnInit {
     return true;
   }
 
+  /**
+   * Handles action after delete recording button pressed.
+   * 
+   * @author Matt Grabara
+   * @version 16/04/2020
+   * 
+   * @param item item to be deleted
+   */
   deleteRecording(item: Item) {
     event.preventDefault();
     event.stopImmediatePropagation();
@@ -204,14 +231,60 @@ export class PlaybackComponent implements OnDestroy, OnInit {
 
     deleteDialogRef.afterClosed().subscribe(result => {
       if ((result === 'SUCCESS') && (item == this.currentItem)) {
-        let navigateIndex = 0;
-        if (item == this.session.getItemArray[0])
-          navigateIndex = 1;
-        this.setCurrent(this.session.getItemArray()[navigateIndex])
-        this.router.navigate(['/', this.session.getItemArray()[navigateIndex].file_name.split('.')[0]]);
+        if (this.session.getItemArray().length > 0) {
+          let navigateIndex = 0;
+          if (item == this.session.getItemArray()[0])
+            navigateIndex = 1;
+          this.setCurrent(this.session.getItemArray()[navigateIndex])
+          this.router.navigate(['/', this.session.getItemArray()[navigateIndex].file_name.split('.')[0]]);
+        } else {
+          this.router.navigate(['/']).then(() => {
+            this.currentItem = this.emptyItem;
+            this.audioSrc = '';
+            this.displayPrompt = true;
+            this.cdRef.detectChanges();
+          });
+        }
       }
     });
   }
+
+  /**
+   * Checks if playlist is empty.
+   * 
+   * @author Matt Grabara
+   * @version 16/04/2020
+   * 
+   * @returns true if playlist is empty, false otherwise
+   */
+  isPlaylistEmpty(): boolean {
+    return this.playlistEmpty;
+  }
+
+  /**
+   * Checks if connected to observables.
+   * 
+   * @author Matt Grabara
+   * @version 16/04/2020
+   * 
+   * @returns true if initialised, false otherwise
+   */
+  isInitialised(): boolean {
+    return this.initialised;
+  }
+
+  /**
+   * Checks if prompt for the first recording should be displayed.
+   * 
+   * @author Matt Grabara
+   * @version 16/04/2020
+   * 
+   * @returns true if prompt should appear, false otherwise
+   */
+  isPromptDisplayed(): boolean {
+    return this.displayPrompt;
+  }
+
   /**
    * Prepares component view, checks for a recording parameter passed in the URL
    *
@@ -221,25 +294,34 @@ export class PlaybackComponent implements OnDestroy, OnInit {
   ngOnInit() {
     // wait for subscription to services
     this.session.prepareObservables().then(() => {
-      let linkRecFound = false;
+      this.initialised = true;
+      // check if any recording available
+      if (this.session.getItemArray().length > 0) {
+        this.playlistEmpty = false;
+        let linkRecFound = false;
 
-      // check if link contains recording name (e.g. https://.../<recording name>)
-      if (this.route.snapshot.params.rec) {
-        // if yes, load recording
-        let recName: String = this.route.snapshot.params.rec;
-        recName = recName.split('.')[0];
+        // check if link contains recording name (e.g. https://.../<recording name>)
+        if (this.route.snapshot.params.rec) {
+          // if yes, load recording
+          let recName: String = this.route.snapshot.params.rec;
+          recName = recName.split('.')[0];
 
-        for (let item of this.session.getItemArray()) {
-          if (item.file_name.split('.')[0] === recName) {
-            this.setCurrent(item);
-            linkRecFound = true;
+          // navigate to the top recording 
+          for (let item of this.session.getItemArray()) {
+            if (item.file_name.split('.')[0] === recName) {
+              this.setCurrent(item);
+              linkRecFound = true;
+            }
           }
         }
-      }
 
-      // if recording not found or link doesn't contain recording name, set first one in the array
-      if (!linkRecFound) {
-        this.router.navigate(['/', this.session.getItemArray()[0].file_name.split('.')[0]]);
+        // if recording not found or link doesn't contain recording name, set first one in the array
+        if (!linkRecFound && this.session.getItemArray()) {
+          // 
+          this.router.navigate(['/', this.session.getItemArray()[0].file_name.split('.')[0]]);
+        }
+      } else {
+        this.displayPrompt = true;
       }
     });
   }
