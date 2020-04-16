@@ -33,6 +33,7 @@ export class UserSessionService {
   private idToken: string;
   private uid: string;
   private initialised: boolean;
+  private tcsShown = false; // used to eliminate double display of TCS dialog
 
   /**
    * Constructor injecting services and modules.
@@ -116,8 +117,10 @@ export class UserSessionService {
     if (!!userMetadata) {
       if (!userMetadata.enabled) {
         this.snackBar.open('Your account has been disabled. Contact support.');
-      } else if (!userMetadata.accepted_tcs) {
+      } else if (!userMetadata.accepted_tcs && !this.tcsShown) {
         // console.log('Dialog should pop up now.');
+        this.snackBar.dismiss();
+        this.tcsShown = true;
         const termsDialogRef = this.termsDialog.open(TermsDialogComponent, {
           height: '210px',
           width: '500px',
@@ -136,6 +139,14 @@ export class UserSessionService {
     }
   }
 
+  /**
+   * Handling recording deletion.
+   * 
+   * @author Matt Grabara
+   * @version 16/04/2020
+   * 
+   * @param item item to be deleted
+   */
   deleteRecording(item: Item) {
     return this.afStorage.storage.refFromURL(item.uri).delete().then(() => {
       this.db.collection('users').doc(this.uid)
