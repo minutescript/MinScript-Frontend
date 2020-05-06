@@ -46,7 +46,7 @@
       </div>
       <!-- ask if diarization required -->
       <div mat-line *ngIf="!notEnglish">
-        <mat-slide-toggle [(ngModel)]="diarize" name="diarize">Enable diarization</mat-slide-toggle>
+        <mat-slide-toggle [(ngModel)]="diarize" name="diarize">Recognise multiple speakers</mat-slide-toggle>
         <!-- select diarization mode -->
         <div *ngIf="diarize">
           <mat-slide-toggle [(ngModel)]="autoDetect" name="autoDetect">Auto-detect number of speakers <em>(experimental)</em></mat-slide-toggle>

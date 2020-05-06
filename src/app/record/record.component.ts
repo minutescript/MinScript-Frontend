@@ -51,7 +51,7 @@ export class RecordComponent {
   private preventTabClosing = false;
   public uploadSelected = false;
   private audioRecorder: any;
-  private diarize = false; // true if user wants to diarize the recording
+  private diarize = true; // true if user wants to diarize the recording
   private autoDetect = false; // true if user wants to automatically detect number of speakers
   private noSpeakers = 2; // default number of speakers
   private mainLang = 'en-US'; // default recognition language
@@ -237,8 +237,10 @@ export class RecordComponent {
     if (!this.notEnglish) {
       this.lastLang = this.mainLang;
       this.mainLang = 'en-US';
+      this.diarize = true;
     } else if (this.lastLang) {
       this.mainLang = this.lastLang;
+      this.diarize = false;
     }
   }
 
@@ -271,7 +273,9 @@ export class RecordComponent {
     this.trustedURL = null;
     this.recordDialog.disableClose = false;
     this.preventTabClosing = false;
-    this.diarize = false;
+    this.notEnglish = false;
+    this.mainLang = 'en-US';
+    this.diarize = true;
     this.autoDetect = false;
     this.noSpeakers = 2;
     this.recordTitle = '';
