@@ -10,6 +10,8 @@ import { Item } from '../interfaces/item';
 export class PrintTranscriptComponent implements OnInit {
   @Input() item: Item;
 
+  private lastSpeaker: number; // if diarization enabled, store ID of the last speaker
+
   constructor() { }
 
   ngOnInit(): void {
@@ -17,6 +19,21 @@ export class PrintTranscriptComponent implements OnInit {
 
   getItem(): Item {
     return this.item;
+  }
+
+  /**
+   * Checks whether speaker has changed in the transcript. 
+   * Does not work for the first word of the transcript due to Angular digest cycle.
+   * 
+   * @author Matt Grabara
+   * @version 14/09/2019
+   * @param speaker ID of the speaker of the new word
+   */
+  isNewSpeaker(speaker: number): boolean {
+    if (this.lastSpeaker === speaker)
+      return false;
+    else this.lastSpeaker = speaker;
+    return true;
   }
 
 }
