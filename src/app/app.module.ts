@@ -17,10 +17,12 @@ import { RecordComponent } from './record/record.component';
 import { PlaybackComponent } from './playback/playback.component';
 import { TermsDialogComponent } from './terms-dialog/terms-dialog.component';
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
+import { PrintTranscriptComponent } from './print-transcript/print-transcript.component';
 
 const appRoutes: Routes = [
   { path: '', component: PlaybackComponent, pathMatch: 'full' },
-  { path: ':rec', component: PlaybackComponent }];
+  { path: ':rec', component: PlaybackComponent },
+  { path: 'print/:rec', component: PrintTranscriptComponent }];
 
 @NgModule({
   declarations: [
@@ -30,6 +32,7 @@ const appRoutes: Routes = [
     PlaybackComponent,
     TermsDialogComponent,
     DeleteDialogComponent,
+    PrintTranscriptComponent
   ],
   imports: [
     BrowserModule,
