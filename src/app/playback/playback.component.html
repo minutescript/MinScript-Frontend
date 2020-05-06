@@ -37,6 +37,9 @@
             <button mat-button (click)="sidenav.toggle()" matTooltip="Search recordings" id="searchButton">
               <mat-icon>search</mat-icon>
             </button>
+            <a mat-button href="javascript:window.print()" matTooltip="Print transcript" id="searchButton">
+              <mat-icon>print</mat-icon>
+            </a>
           </div>
           <!-- FAB to start a recording; not available when user not enabled or no recordings available -->
           <button mat-fab *ngIf="canRecord()" color="warn" (click)="openRecordDialog()" class="floatingFab">
