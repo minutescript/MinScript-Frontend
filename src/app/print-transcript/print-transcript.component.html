@@ -1,18 +1,20 @@
-<h1>{{getCurrentItem().title}}</h1>
-<!-- transcript area and transcript content -->
-<div id="transcript-area">
-    <!-- transcript content is iterated through every word as each word triggers different action on click -->
-    <span *ngFor="let word of currentItem.word_ts; first as isFirst">
-      <!-- if diarization enabled, check if speaker changed -->
-      <!-- due to Angular digest cycle, isNewSpeaker call is not sufficient if checking fo the first word -->
-      <span *ngIf="word?.speaker && (isFirst || isNewSpeaker(word.speaker))">
-        <!-- if it is not the first speaker, add break between speakers -->
-        <span *ngIf="!isFirst">
-          <br /><br />
+<div class="print">
+  <h1>{{item.title}}</h1>
+  <!-- transcript area and transcript content -->
+  <div id="transcript-area">
+      <!-- transcript content is iterated through every word as each word triggers different action on click -->
+      <span *ngFor="let word of item.word_ts; first as isFirst">
+        <!-- if diarization enabled, check if speaker changed -->
+        <!-- due to Angular digest cycle, isNewSpeaker call is not sufficient if checking fo the first word -->
+        <span *ngIf="word?.speaker && (isFirst || isNewSpeaker(word.speaker))">
+          <!-- if it is not the first speaker, add break between speakers -->
+          <span *ngIf="!isFirst">
+            <br /><br />
+          </span>
+          <!-- identify the speaker -->
+          <em>Speaker {{word.speaker}}: </em>
         </span>
-        <!-- identify the speaker -->
-        <em>Speaker {{word.speaker}}: </em>
+        <span class="word-ts">{{word.w}}</span>
       </span>
-      <span class="word-ts">{{word.w}}</span>
-    </span>
+  </div>
 </div>

@@ -1,6 +1,6 @@
 <!-- *ngIf makes sure everything is loaded before loading the rest of the component.
       This means item must be selected and its audio URL acquired. -->
-<div *ngIf="this.getAudioSrc()">
+<div *ngIf="this.getAudioSrc()" class="no-print">
 
   <!-- defining area split between main area and initially hidden sidenav -->
   <mat-sidenav-container>
@@ -89,6 +89,9 @@
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
+<!-- print-only div for easy printing of the current transcript -->
+<app-print-transcript *ngIf="this.getAudioSrc()" [item]="this.currentItem"></app-print-transcript>
+<!-- when playlist is empty, display button to add the first recording-->
 <div *ngIf="this.isPromptDisplayed()">
   <button mat-raised-button *ngIf="this.canRecord()" color="warn" (click)="this.openRecordDialog()">
     <mat-icon>add</mat-icon> Add your first recording

@@ -21,8 +21,7 @@ import { PrintTranscriptComponent } from './print-transcript/print-transcript.co
 
 const appRoutes: Routes = [
   { path: '', component: PlaybackComponent, pathMatch: 'full' },
-  { path: ':rec', component: PlaybackComponent },
-  { path: 'print/:rec', component: PrintTranscriptComponent }];
+  { path: ':rec', component: PlaybackComponent }];
 
 @NgModule({
   declarations: [

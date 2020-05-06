@@ -1,5 +1,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <div class="container page-wrap">
+  <div class="no-print">
   <mat-toolbar color="primary">
     <mat-toolbar-row>
       <span><h1 class="minutescript__logo"></h1></span>
@@ -11,6 +12,7 @@
     <mat-toolbar-row>
     </mat-toolbar-row>
   </mat-toolbar>
+</div>
   <div class="container">
   <mat-card id="main-card">
   <div class="content" *ngIf="afAuth.authState | async as user; else showPrompt">
@@ -23,6 +25,7 @@
 </mat-card>
 </div>
 
+<div class="no-print">
 <mat-toolbar color="primary" class="footer">
   <mat-toolbar-row>
   </mat-toolbar-row>
@@ -37,5 +40,6 @@
     </span>
   </mat-toolbar-row>
 </mat-toolbar>
+</div>
 
 </div>

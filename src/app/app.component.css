@@ -48,10 +48,15 @@ md-tabs.md-no-animation md-ink-bar {
   min-height: 100vh;
 }
 
-.page-wrap {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+/*
+ * Added @media screen to prevent printing empty page on Firefox
+ */
+@media screen {
+  .page-wrap {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
 }
 
 .container {

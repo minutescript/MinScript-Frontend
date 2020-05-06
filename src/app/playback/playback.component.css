@@ -84,3 +84,9 @@ mat-sidenav {
 mat-sidenav-content {
   background-color: #fff;
 }
+
+@media screen {
+  .print {
+    display: none;
+  }
+}
