@@ -115,7 +115,7 @@ export class UploadService {
    * @param no_speakers (optional) if speakers not automatically detected, number of speakers needs to be provided here
    */
   uploadToken(destination: string, file_name: string, main_lang: string, 
-    extra_lang: string[], diarize: boolean, auto_detect: boolean, no_speakers?: number): Promise<TokenUploadResponse> {
+    extra_lang: string[], diarize: boolean, no_speakers_min?: number, no_speakers_max?: number, auto_detect = false): Promise<TokenUploadResponse> {
     return new Promise<any>(resolve => {
       // add ID token to the Authorization header of the request
       const authHeaders = new HttpHeaders().append('Authorization', this.session.getToken());
@@ -123,7 +123,7 @@ export class UploadService {
       const diarizeStr = diarize ? "true" : "false";
       const auto_detectStr = auto_detect ? "true" : "false";
       // post information to the backend
-      const token = {file_name, main_lang, extra_lang, diarize: diarizeStr, auto_detect: auto_detectStr, no_speakers}
+      const token = {file_name, main_lang, extra_lang, diarize: diarizeStr, auto_detect: auto_detectStr, no_speakers_min, no_speakers_max}
       // use for debugging
       // console.log(token);
       this.http.post(destination, token, {headers: authHeaders})

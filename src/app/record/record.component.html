@@ -48,14 +48,20 @@
       <div mat-line *ngIf="!notEnglish">
         <mat-slide-toggle [(ngModel)]="diarize" name="diarize">Recognise multiple speakers</mat-slide-toggle>
         <!-- select diarization mode -->
-        <div *ngIf="diarize">
-          <mat-slide-toggle [(ngModel)]="autoDetect" name="autoDetect">Auto-detect number of speakers <em>(experimental)</em></mat-slide-toggle>
-          <div mat-line *ngIf="!autoDetect">
+        <mat-card *ngIf="diarize">
+          <!-- <mat-slide-toggle [(ngModel)]="autoDetect" name="autoDetect">Auto-detect number of speakers <em>(experimental)</em></mat-slide-toggle> -->
+          <!-- <div mat-line *ngIf="!autoDetect"> --> 
+          Number of speakers estimate:
+          <div mat-line>
             <mat-form-field>
-              <input matInput type="number" [(ngModel)]="noSpeakers" name="noSpeakers" placeholder="Number of speakers" required />
+              <input matInput type="number" [(ngModel)]="noSpeakersMin" name="noSpeakersMin" placeholder="min" required />
+            </mat-form-field>
+              -
+            <mat-form-field>
+              <input matInput type="number" [(ngModel)]="noSpeakersMax" name="noSpeakersMax" placeholder="max" required />
             </mat-form-field>
           </div>
-        </div>
+      </mat-card>
       </div>
       <!-- allow user to give a title to a recording -->
       <mat-form-field>

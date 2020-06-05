@@ -53,7 +53,8 @@ export class RecordComponent {
   private audioRecorder: any;
   private diarize = true; // true if user wants to diarize the recording
   private autoDetect = false; // true if user wants to automatically detect number of speakers
-  private noSpeakers = 2; // default number of speakers
+  private noSpeakersMin = 2; // default number of speakers
+  private noSpeakersMax = 3; // default number of speakers
   private mainLang = 'en-US'; // default recognition language
   private notEnglish = false; // enabled recognition in other languages
   private lastLang: string; // for the convenience of the undecided end user
@@ -277,7 +278,8 @@ export class RecordComponent {
     this.mainLang = 'en-US';
     this.diarize = true;
     this.autoDetect = false;
-    this.noSpeakers = 2;
+    this.noSpeakersMin = 2;
+    this.noSpeakersMax = 3;
     this.recordTitle = '';
     this.reachedLimit = false;
     this.conversionNeeded = false;
@@ -320,12 +322,13 @@ export class RecordComponent {
         };
 
         if (this.diarize && !this.autoDetect) {
-          metadata['no_speakers'] = this.noSpeakers;
+          metadata['no_speakers_min'] = this.noSpeakersMin;
+          metadata['no_speakers_max'] = this.noSpeakersMax;
         }
 
         const sendMeta = this.session.setRecordingMetadata(metadata).then(() => {
           this.upload.uploadToken(BACKEND_URL + '/transcription', uploadRecRes.name, this.mainLang, [], 
-                                  this.diarize, this.autoDetect, this.noSpeakers).then((res: TokenUploadResponse) => {
+                                  this.diarize, this.noSpeakersMin, this.noSpeakersMax).then((res: TokenUploadResponse) => {
             this.processStatus = res;
             if (res.status === 'PROCESS_STARTED') {
               this.showProcessing = false;

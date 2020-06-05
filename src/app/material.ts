@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
+import { MatCardModule, MatCard } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
@@ -50,7 +50,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     MatCheckboxModule,
     MatSidenavModule,
     MatSlideToggleModule,
-    MatSelectModule
+    MatSelectModule,
+    MatCardModule
   ],
   exports: [
     MatToolbarModule,
@@ -73,7 +74,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     MatCheckboxModule,
     MatSidenavModule,
     MatSlideToggleModule,
-    MatSelectModule
+    MatSelectModule,
+    MatCardModule
   ]
 })
 export class MaterialModule { }
