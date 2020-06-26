@@ -142,28 +142,16 @@ export class PlaybackComponent implements OnDestroy, OnInit {
         if (item.transcript_status != 'success')  {
           if (this.docSub)
             this.docSub.unsubscribe();
+          
+          // if item is about to be converted, search destination file name instead
+          if (item.file_name.split('.')[1] === 'unknown')
+            item.file_name = item.file_name.split('.')[0] + '.ogg';
 
           this.docSub = this.session.fetchLiveItem(item).subscribe((doc: Item) => {
-            console.log('subscribed!');
             if (doc) {
-              console.log(doc);
               this.currentItem = doc;
               this.cdRef.detectChanges();
             }
-            /*
-            console.log('fetching doc');
-            if (doc) {
-              console.log('doc fetched');
-              if (doc.transcript_status === 'success' && doc?.word_ts) {
-                console.log('words available');
-                this.currentItem = doc;
-                // notify change detector to update layout and avoid errors
-                this.cdRef.detectChanges();
-                
-                // this.docSub.unsubscribe();
-              }
-            
-            } */
           });
         }
         // retrieve item URL
