@@ -63,6 +63,7 @@ export class RecordComponent {
   private reachedLimit = false; // when true, info displayed user reached number of available minutes
   private conversionNeeded = false;
   private duration: number;
+  private durationComputed = false;
 
   /**
    * Constructor adds event listener to prevent accidental tab closure during recording.
@@ -228,10 +229,15 @@ export class RecordComponent {
     this.showSaveDialog = true;
     this.finalBlob = blob;
     this.getAudioDuration(this.finalBlob).then(duration => {
+      this.durationComputed = true;
       this.duration = duration;
     });
     this.blobURL = URL.createObjectURL(blob);
     this.trustedURL = this.sanitizer.bypassSecurityTrustResourceUrl(this.blobURL);
+  }
+
+  isDurationComputed(): boolean {
+    return this.durationComputed;
   }
 
   resetDefaultLang() {

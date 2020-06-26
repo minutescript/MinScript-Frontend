@@ -23,8 +23,11 @@
     <div *ngIf="isLimitReached()">
       <em>Your recording was interrupted due to insufficient credit.</em>
     </div>
-    <div *ngIf="!sufficientCredits()">
+    <div *ngIf="this.isDurationComputed() && !sufficientCredits()">
       <em>Insufficient credits to process the recording.</em>
+    </div>
+    <div *ngIf="!this.isDurationComputed()">
+      <em>Verifying if sufficient credits for upload...</em>
     </div>
     <!-- audio element to listen to the recording before upload -->
     <audio class="e2e-iframe-trusted-src" id="player" controls [src]="trustedURL">
