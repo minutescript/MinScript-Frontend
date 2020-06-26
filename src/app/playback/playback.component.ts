@@ -55,13 +55,12 @@ export class PlaybackComponent implements OnDestroy, OnInit {
    * @param session reference to the UserSessionService
    * @param cdRef reference to the Angular Change Detector
    * @param search  reference to the SearchService
-   * @param snackBar  reference to the Material Snack Bar module
    * @param recordDialog  reference to the Material Dialog module used for loading RecordComponent as a modal
    * @param route reference to the ActivatedRoute interface to fetch parameters provided in the URL
    * @param router  reference to the Angular Router module providing possibility for navigation without refresh
    */
   constructor(private session: UserSessionService, private cdRef: ChangeDetectorRef, private search: SearchService,
-              private snackBar: MatSnackBar, private recordDialog: MatDialog, private deleteDialog: MatDialog, private route: ActivatedRoute, private router: Router) {
+              private recordDialog: MatDialog, private deleteDialog: MatDialog, private route: ActivatedRoute, private router: Router) {
   }
 
   /**
@@ -136,12 +135,14 @@ export class PlaybackComponent implements OnDestroy, OnInit {
       if (this.currentItem !== item) {
         // replace current item with the selected item
         this.currentItem = item;
+        // notify change detector to update layout and avoid errors
+        this.cdRef.detectChanges();
         // retrieve item URL
         this.session.getRecordingURL(item.uri).then((url) => {
           // update audio URL
           this.audioSrc = url;
           // notify change detector to update layout
-          //this.cdRef.detectChanges();
+          this.cdRef.detectChanges();
         }).then(() => {
           // resolve promise when change is made
           resolve();
@@ -222,8 +223,8 @@ export class PlaybackComponent implements OnDestroy, OnInit {
    * @param item item to be deleted
    */
   deleteRecording(item: Item) {
-    event.preventDefault();
-    event.stopImmediatePropagation();
+    //event.preventDefault();
+    //event.stopImmediatePropagation();
     const deleteDialogRef = this.deleteDialog.open(DeleteDialogComponent, {
       height: '320px',
       width: '320px',
