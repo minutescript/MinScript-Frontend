@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import {RecordComponent} from '../record/record.component';
 import {Item} from '../interfaces/item';
 import {UserSessionService} from '../services/user-session.service';
