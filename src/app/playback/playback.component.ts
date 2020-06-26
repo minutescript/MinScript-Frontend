@@ -77,6 +77,7 @@ export class PlaybackComponent implements OnDestroy, OnInit {
     }).afterClosed().subscribe(result => {
       if (result == 'PROCESS_STARTED' && !this.getAudioSrc()) {
         this.displayPrompt = false;
+        this.recordingOnClick(this.session.getItemArray()[0]);
       }
     });
   }
@@ -140,7 +141,7 @@ export class PlaybackComponent implements OnDestroy, OnInit {
           // update audio URL
           this.audioSrc = url;
           // notify change detector to update layout
-          this.cdRef.detectChanges();
+          //this.cdRef.detectChanges();
         }).then(() => {
           // resolve promise when change is made
           resolve();
@@ -235,8 +236,9 @@ export class PlaybackComponent implements OnDestroy, OnInit {
           let navigateIndex = 0;
           if (item == this.session.getItemArray()[0])
             navigateIndex = 1;
-          this.setCurrent(this.session.getItemArray()[navigateIndex])
-          this.router.navigate(['/', this.session.getItemArray()[navigateIndex].file_name.split('.')[0]]);
+          this.recordingOnClick(this.session.getItemArray()[navigateIndex]);
+          // this.setCurrent(this.session.getItemArray()[navigateIndex])
+          // this.router.navigate(['/', this.session.getItemArray()[navigateIndex].file_name.split('.')[0]]);
         } else {
           this.router.navigate(['/']).then(() => {
             this.currentItem = this.emptyItem;

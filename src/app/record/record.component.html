@@ -6,7 +6,7 @@
             color="accent" (click)="clickRecordBtn()">Start recording</button>
     <!-- show upload recording button -->
     <button mat-raised-button id="openUploadDialogBtn"
-            color="accent" (click)="uploadDialogBtn()">Upload from Zoom</button>
+            color="accent" (click)="uploadDialogBtn()">Upload</button>
     <!-- if Upload recording button clicked, show file picker -->
     <div id="uploadDialog" *ngIf="uploadSelected">
       <input #fileSelector type="file" id="fileSelector" name="fileUpload">
