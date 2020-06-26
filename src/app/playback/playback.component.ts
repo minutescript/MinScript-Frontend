@@ -32,6 +32,7 @@ export class PlaybackComponent implements OnDestroy, OnInit {
   private initialised = false; // true if metadata available
   private playlistEmpty = false; // true if anything on the playlist
   private displayPrompt = false; // true if new prompt needs to be displayed
+  private docSub; // to control live document fetching subscriptions
   private emptyItem: Item = {
     file_name: '',
     format: '',
@@ -136,6 +137,35 @@ export class PlaybackComponent implements OnDestroy, OnInit {
         this.currentItem = item;
         // notify change detector to update layout and avoid errors
         this.cdRef.detectChanges();
+
+        // if transcription still in progres, keep polling for updates
+        if (item.transcript_status != 'success')  {
+          if (this.docSub)
+            this.docSub.unsubscribe();
+
+          this.docSub = this.session.fetchLiveItem(item).subscribe((doc: Item) => {
+            console.log('subscribed!');
+            if (doc) {
+              console.log(doc);
+              this.currentItem = doc;
+              this.cdRef.detectChanges();
+            }
+            /*
+            console.log('fetching doc');
+            if (doc) {
+              console.log('doc fetched');
+              if (doc.transcript_status === 'success' && doc?.word_ts) {
+                console.log('words available');
+                this.currentItem = doc;
+                // notify change detector to update layout and avoid errors
+                this.cdRef.detectChanges();
+                
+                // this.docSub.unsubscribe();
+              }
+            
+            } */
+          });
+        }
         // retrieve item URL
         this.session.getRecordingURL(item.uri).then((url) => {
           // update audio URL

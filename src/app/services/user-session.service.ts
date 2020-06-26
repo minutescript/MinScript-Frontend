@@ -266,4 +266,9 @@ export class UserSessionService {
   setRecordingMetadata(metadata: RecordingMetadata): Promise<void> {
     return this.db.collection('users').doc(this.uid).collection('recordings').doc(metadata.file_name).set(metadata);
   }
+
+  fetchLiveItem(item: Item) {
+    const docRef = this.db.collection('users').doc(this.uid).collection('recordings').doc(item.file_name);
+    return docRef.valueChanges();
+  }
 }
