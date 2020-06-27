@@ -267,6 +267,14 @@ export class UserSessionService {
     return this.db.collection('users').doc(this.uid).collection('recordings').doc(metadata.file_name).set(metadata);
   }
 
+  /**
+   * Fetches item with live updates.
+   * 
+   * @author Matt Grabara
+   * @version 27/06/2020
+   * 
+   * @item item to be fetched
+   */
   fetchLiveItem(item: Item) {
     const docRef = this.db.collection('users').doc(this.uid).collection('recordings').doc(item.file_name);
     return docRef.valueChanges();
