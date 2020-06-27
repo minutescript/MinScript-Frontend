@@ -129,10 +129,10 @@ export class UploadService {
       this.http.post(destination, token, {headers: authHeaders})
       .subscribe((res: Response) => {
         // return upload status
-        resolve({status: res.status, idToken: this.session.getToken()});
+        resolve({status: res.status});
         }, err => {
         // return error information
-        resolve({status: err.status, idToken: this.session.getToken()});
+        resolve({status: err.status});
       });
     });
   }
