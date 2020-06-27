@@ -62,7 +62,7 @@ export class UserSessionService {
   prepareObservables(): Promise<void> {
     return new Promise<void>(resolve => {
       // detect whether user logged in
-      this.afAuth.auth.onAuthStateChanged((user) => {
+      this.afAuth.onAuthStateChanged((user) => {
         if (user) {
           // if user data available, get UID and idToken
           this.uid = user.uid;
@@ -161,7 +161,7 @@ export class UserSessionService {
    * @version 29/06/2019
    */
   login() {
-    this.afAuth.auth.signInWithPopup( new auth.GoogleAuthProvider()).then(async() => {
+    this.afAuth.signInWithPopup( new auth.GoogleAuthProvider()).then(async() => {
       await this.prepareObservables();
     });
   }
@@ -173,7 +173,7 @@ export class UserSessionService {
    * @version 29/06/2019
    */
   logout() {
-    this.afAuth.auth.signOut().then(() => {
+    this.afAuth.signOut().then(() => {
       this.itemArraySub.unsubscribe();
       this.userMetadataSub.unsubscribe();
       this.router.navigate(['/']);
