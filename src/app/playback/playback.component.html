@@ -79,12 +79,14 @@
               <!-- recording length -->
               <p mat-line class="mat-line">{{this.getPlayTime(item.length)}}</p>
               <!-- delete button -->
-              <button mat-button (click)='deleteRecording(item)' *ngIf="item.transcript_status!='processing'"><mat-icon matTooltip="Delete recording">delete</mat-icon></button>
+              <button mat-button (click)='deleteRecording(item)' *ngIf="item.transcript_status && item.transcript_status!='processing'"><mat-icon matTooltip="Delete recording">delete</mat-icon></button>
               <!-- transcription status -->
-              <mat-icon *ngIf="item.transcript_status=='success'" matTooltip="Transcription complete">done</mat-icon>
-              <mat-icon *ngIf="item.transcript_status==null
-                || item.transcript_status.includes('error')" matTooltip="Transcription failed">error</mat-icon>
-              <mat-icon *ngIf="item.transcript_status=='processing'" matTooltip="Transcription in progress">cached</mat-icon>
+              <span *ngIf="item.transcript_status; else statusUndefined">
+                <mat-icon *ngIf="item.transcript_status=='success'" matTooltip="Transcription complete">done</mat-icon>
+                <mat-icon *ngIf="item.transcript_status.includes('error')" matTooltip="Transcription failed">error</mat-icon>
+                <mat-icon *ngIf="item.transcript_status=='processing'" matTooltip="Transcription in progress">cached</mat-icon>
+              </span>
+              <ng-template #statusUndefined><mat-icon matTooltip="Transcription about to start">cached</mat-icon></ng-template>
             </mat-list-item>
           </mat-nav-list>
         </div>
